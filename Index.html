@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwasthyaSetu AI</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f5; padding: 15px; margin: 0; }
+        .header { background: #0056b3; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px; }
+        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        h2 { color: #0056b3; margin-top: 0; font-size: 18px; }
+        label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn { background: #0056b3; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 16px; width: 100%; margin-top: 15px; font-weight: bold; }
+        .btn-outline { background: transparent; color: #0056b3; border: 2px solid #0056b3; }
+        .facility-item { background: #f8f9fa; padding: 10px; border-left: 4px solid #0056b3; margin-bottom: 8px; border-radius: 4px; }
+        .badge { background: #28a745; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        .badge-red { background: #dc3545; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        .stats-grid { display: flex; gap: 10px; text-align: center; }
+        .stat-box { flex: 1; background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; }
+        .stat-number { font-size: 18px; font-weight: bold; color: #0056b3; }
+        .log-item { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 style="margin:0; font-size: 22px;">SwasthyaSetu AI</h1>
+        <p style="margin:5px 0 0 0; font-size: 13px;">Rural Healthcare & Quality Platform</p>
+    </div>
+
+    <!-- 1. Quality Analytics Dashboard -->
+    <div class="card">
+        <h2>System Performance</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number" id="referral-count">0</div>
+                <small>Assessments</small>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">45m</div>
+                <small>Wait Saved</small>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="tele-count">128</div>
+                <small>Teleconsults</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Care Finder Section -->
+    <div class="card">
+        <h2>1. Nearby Facilities (Care Finder)</h2>
+        <div class="facility-item">
+            <strong>PHC Rampur (Primary Health Centre)</strong><br>
+            <small>Distance: 2.4 km | Queue: 8 Patients</small><br>
+            <span class="badge">Operational</span>
+        </div>
+        <div class="facility-item">
+            <strong>District Hospital Rampur</strong><br>
+            <small>Distance: 14.0 km | Queue: 23 Patients</small><br>
+            <span class="badge" style="background:#ffc107; color:black;">High Demand</span>
+        </div>
+    </div>
+
+    <!-- 3. Patient Triage Form -->
+    <div class="card">
+        <h2>2. Patient Details (Assisted Triage)</h2>
+        <label>Patient Name:</label>
+        <input type="text" id="name" placeholder="Enter patient name">
+
+        <label>Age:</label>
+        <input type="number" id="age" placeholder="Age">
+
+        <label>Primary Symptoms:</label>
+        <select id="symptom">
+            <option value="fever">Mild Fever / Cold</option>
+            <option value="chest_pain">Chest Pain</option>
+            <option value="breathing">Severe Breathlessness</option>
+        </select>
+
+        <button class="btn" onclick="checkHealth()">Submit Assessment</button>
+        <button class="btn btn-outline" onclick="startTeleconsult()">Request Teleconsultation</button>
+    </div>
+
+    <!-- 4. Live Referral Tracker Log -->
+    <div class="card">
+        <h2>3. Recent Referrals Log</h2>
+        <div id="log-list"><p style="color:#777; font-size:13px;">No recent submissions.</p></div>
+    </div>
+
+    <script>
+        var assessmentCount = 0;
+        var teleconsultCount = 128;
+
+        function checkHealth() {
+            var name = document.getElementById('name').value;
+            var age = document.getElementById('age').value;
+            var symptomSelect = document.getElementById('symptom');
+            var symptomText = symptomSelect.options[symptomSelect.selectedIndex].text;
+            var symptomVal = symptomSelect.value;
+
+            if(!name) {
+                alert('Please enter the patient name.');
+                return;
+            }
+
+            assessmentCount++;
+            document.getElementById('referral-count').innerText = assessmentCount;
+
+            var logList = document.getElementById('log-list');
+            if(assessmentCount === 1) logList.innerHTML = '';
+
+            var priorityBadge = (symptomVal === 'chest_pain' || symptomVal === 'breathing') 
+                ? '<span class="badge-red">HIGH RISK</span>' 
+                : '<span class="badge">ROUTINE</span>';
+
+            logList.innerHTML = '<div class="log-item"><strong>' + name + '</strong> (' + (age || 'N/A') + ' yrs) - ' + symptomText + ' ' + priorityBadge + '</div>' + logList.innerHTML;
+
+            if(symptomVal === 'chest_pain' || symptomVal === 'breathing') {
+                alert('⚠️ EMERGENCY ALERT!\nPriority: RED\nRoute patient immediately to District Hospital Rampur.');
+            } else {
+                alert('✅ ROUTINE CARE\nPriority: GREEN\nPatient can be treated at local PHC Rampur.');
+            }
+        }
+
+        function startTeleconsult() {
+            var name = document.getElementById('name').value;
+            if(!name) {
+                alert('Please enter the patient name first.');
+                return;
+            }
+            teleconsultCount++;
+            document.getElementById('tele-count').innerText = teleconsultCount;
+            alert('📞 Connecting ' + name + ' to an available remote medical officer via eSanjeevani...');
+        }
+    </script>
+
+</body>
+</html>
+
