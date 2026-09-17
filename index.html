@@ -184,6 +184,27 @@
       }
     }
   </script>
+<!-- Firebase Web SDK Compat Libraries -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjVOgQ8nM7rpYMU6B2aE5vq1Ul...", 
+    authDomain: "swasthyasetu-ai-c0307.firebaseapp.com",
+    projectId: "swasthyasetu-ai-c0307",
+    storageBucket: "swasthyasetu-ai-c0307.firebasestorage.app",
+    messagingSenderId: "1078819949788",
+    appId: "1:1078819949788:web:c23fb0566d556...",
+    measurementId: "G-8VD5PNQ03H"
+  };
+
+  // Initialize Firebase globally
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
 
 </body>
 </html>
